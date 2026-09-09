@@ -22,8 +22,8 @@ sys.path.insert(0, str(ROOT / "benchmarks"))
 
 from multi_needle_1m import build_episode, evaluate_episode  # noqa: E402
 from native_rag.engine import NativeRAGEngine  # noqa: E402
-from native_rag.model import Qwen35Backend  # noqa: E402
-from native_rag.prompt import build_messages  # noqa: E402
+from native_rag.model import load_backend  # noqa: E402
+from native_rag.prompt import build_prompt_spec  # noqa: E402
 
 
 DEFAULT_MODEL = ROOT.parent / "Qwen2.5-Coder"
@@ -48,6 +48,7 @@ def _ordered_answers(output: str, expected: list[str]) -> tuple[int, bool, list[
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", type=Path, default=DEFAULT_MODEL)
+    parser.add_argument("--backend", choices=["auto", "generic", "qwen35"], default="qwen35")
     parser.add_argument("--dtype", choices=["nf4", "fp16", "fp32", "bf16"], default="nf4")
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--prefill-slice", type=int, default=128)
@@ -75,7 +76,7 @@ def main() -> None:
     if args.samples <= 0:
         raise ValueError("samples must be positive")
     print(
-        f"Multi-needle model benchmark: model={args.model} dtype={args.dtype} "
+        f"Multi-needle model benchmark: model={args.model} backend={args.backend} dtype={args.dtype} "
         f"corpus={args.corpus_tokens} tokenizer-tokens samples={args.samples} "
         f"needles={args.needles} budget={args.budget_tokens} "
         f"small_chunk={args.chunk_tokens} span_size={args.span_size} "
@@ -85,7 +86,12 @@ def main() -> None:
     )
     if args.dtype == "nf4":
         print("INFO: loading 4-bit NF4 weights with FP16 compute.", flush=True)
-    backend = Qwen35Backend.load(args.model, device=args.device, dtype=args.dtype)
+    backend = load_backend(
+        args.model,
+        device=args.device,
+        dtype=args.dtype,
+        backend=args.backend,
+    )
     engine = NativeRAGEngine(backend, prefill_slice=args.prefill_slice)
     results: list[dict] = []
     started = time.perf_counter()
@@ -120,9 +126,9 @@ def main() -> None:
             radius=args.neighbor_radius,
             max_small_chunks=args.budget_tokens // args.chunk_tokens,
         )
-        messages = build_messages(episode.question, selected)
+        prompt = build_prompt_spec(episode.question, selected)
         generation = engine.generate(
-            messages,
+            prompt,
             max_new_tokens=args.max_new_tokens,
             temperature=0.0,
             thinking=args.thinking,
@@ -156,6 +162,7 @@ def main() -> None:
     summary = {
         "benchmark": "Native RAG synthetic multi-needle generation",
         "model": str(args.model),
+        "backend": args.backend,
         "dtype": args.dtype,
         "corpus_tokens": args.corpus_tokens,
         "samples": count,

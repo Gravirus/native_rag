@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "native-rag"
 version = "0.1.0"
-description = "Document-focused Native RAG for Qwen3.5"
+description = "Document-focused Native RAG for local Transformers language models"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

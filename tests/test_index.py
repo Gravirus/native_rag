@@ -1,15 +1,27 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 
+from native_rag.backend import BackendCapabilities
 from native_rag.documents import DocumentChunk
 from native_rag.index import DocumentIndex
 
 
-class DummyEmbedder:
+class DummyGenerator:
     model_path = Path("dummy-model")
+    capabilities = BackendCapabilities(supports_native_dense_features=True)
+    dense_feature_descriptor = {
+        "provider": "model_native",
+        "model_fingerprint": "dummy",
+        "architecture": "dummy",
+        "feature_layer": 0,
+        "pooling": "mean",
+        "normalization": "none",
+        "dimension": 2,
+    }
 
-    def embed(self, texts: list[str]) -> np.ndarray:
+    def native_dense_features(self, texts: list[str]) -> np.ndarray:
         return np.asarray([[float(len(text)), 1.0] for text in texts], dtype=np.float32)
 
 
@@ -26,9 +38,31 @@ def test_index_roundtrip(tmp_path: Path) -> None:
 
 def test_index_builds_embeddings_through_backend(tmp_path: Path) -> None:
     (tmp_path / "guide.md").write_text("# Guide\n\nUse the documentation.", encoding="utf-8")
-    index = DocumentIndex.build(tmp_path, embedder=DummyEmbedder(), chunk_chars=100, overlap_chars=10)
+    index = DocumentIndex.build(tmp_path, generator=DummyGenerator(), chunk_chars=100, overlap_chars=10)
     assert index.dense is not None
     assert index.metadata["embedding_dim"] == 2
+    assert index.metadata["dense"]["provider"] == "model_native"
+
+
+def test_index_without_native_features_is_model_independent(tmp_path: Path) -> None:
+    (tmp_path / "guide.md").write_text("# Guide\n\nUse the documentation.", encoding="utf-8")
+    index = DocumentIndex.build(tmp_path)
+
+    assert index.dense is None
+    assert index.metadata["dense"] is None
+
+
+def test_index_rejects_incompatible_native_dense_generator(tmp_path: Path) -> None:
+    (tmp_path / "guide.md").write_text("# Guide\n\nUse the documentation.", encoding="utf-8")
+    index = DocumentIndex.build(tmp_path, generator=DummyGenerator())
+    mismatched = DummyGenerator()
+    mismatched.dense_feature_descriptor = {
+        **DummyGenerator.dense_feature_descriptor,
+        "model_fingerprint": "different-model",
+    }
+
+    with pytest.raises(ValueError, match="does not match the index"):
+        index.search("documentation", top_k=1, generator=mismatched)
 
 
 def test_search_expands_neighbors_without_crossing_documents() -> None:

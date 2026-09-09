@@ -4,18 +4,19 @@
 
 ## Что используется
 
-- Qwen3.5 Instruct из локального каталога `../Qwen3.5-0.8b`;
+- локальная Transformers causal/chat-модель через `GeneratorBackend`;
 - чанки Markdown/TXT с overlap и сохранением источника/заголовка;
 - lexical BM25-поиск;
-- dense-представления из скрытого состояния Qwen3.5;
-- Reciprocal Rank Fusion (RRF) для объединения двух сигналов;
-- chunked prefill и DynamicCache для генерации;
+- optional native dense-представления из скрытого состояния той же загруженной модели;
+- Reciprocal Rank Fusion (RRF) для объединения lexical и native-dense сигналов;
+- capability-based chunked prefill и model-native KV-cache;
+- compatibility fallback через обычный `generate()` для backend’ов без native execution;
 - 4-bit NF4-квантование весов с FP16 compute по умолчанию, чтобы полный длинный контекст помещался в 12 ГБ VRAM;
 - `fp16` как потенциально более быстрый, но менее экономный по весам режим;
 - `fp32` как baseline из-за обнаруженной нестабильности Qwen3.5 GDN в `bf16` на текущем Windows/CUDA-стеке;
 - reasoning переключается флагом `--thinking`.
 
-Локальный каталог модели называется `Qwen3.5-0.8b`; конфигурация модели является источником истины. Если нужен другой вариант Qwen3.5, передайте его через `--model` или `NATIVE_RAG_MODEL`.
+Qwen3.5 остаётся reference backend’ом текущего проекта. Для другой стандартной Transformers-модели передайте её каталог через `--model`; выбор backend’а выполняется через `--backend auto|generic|qwen35`.
 
 ## Быстрый запуск
 
@@ -25,6 +26,12 @@
 python -m pip install -e .
 python -m native_rag.cli index --docs .\docs --out .\indexes\docs
 python -m native_rag.cli ask --index .\indexes\docs --question "Что описано в документации?"
+```
+
+По умолчанию индекс строится в portable BM25-only режиме и не загружает модель. Если нужен native dense-сигнал от той же LLM, явно укажите `--native-dense` при индексации и используйте совместимый backend при `ask`:
+
+```powershell
+python -m native_rag.cli index --docs .\docs --out .\indexes\docs --native-dense --model ..\Qwen3.5-0.8b
 ```
 
 Для reasoning:
@@ -65,13 +72,18 @@ documents/*.md, *.txt
         ▼
 DocumentLoader → structural chunks → persisted Index
                                       ├─ BM25
-                                      └─ Qwen hidden-state vectors
+                                      └─ optional native features from GeneratorBackend
         │
         ▼
 HybridRetriever (RRF)
         │
         ▼
-Neighbor expansion → ContextBuilder → Qwen chat template → chunked prefill → DynamicCache → answer
+Neighbor expansion → PromptSpec → GeneratorBackend
+                                  ├─ model tokenizer
+                                  ├─ optional chunked prefill/cache
+                                  └─ compatibility generate()
+                                      ↓
+                                    answer
 ```
 
 Чанки добавляются в контекст перед вопросом, затем один раз префиллятся и переиспользуются через KV-cache. В retrieval нет понятия «текущего будущего чанка»: запрос и корпус разделены на уровне документов.

@@ -13,3 +13,5 @@ indexes/
 *.npz
 *.pt
 
+
+Qwen2.5-Coder/

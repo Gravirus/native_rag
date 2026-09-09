@@ -1,0 +1,343 @@
+{
+  "benchmark": "Native RAG synthetic multi-needle generation",
+  "model": "Qwen2.5-Coder",
+  "backend": "auto",
+  "dtype": "nf4",
+  "corpus_tokens": 1000000,
+  "samples": 1,
+  "needles": 8,
+  "budget_tokens": 8192,
+  "chunk_tokens": 128,
+  "span_size": 2,
+  "candidate_k": 128,
+  "neighbor_radius": 1,
+  "prefill_slice": 128,
+  "max_new_tokens": 8,
+  "thinking": false,
+  "mean_retrieval_active_recall": 1.0,
+  "mean_retrieval_full_recall": 1.0,
+  "mean_answer_recall": 0.0,
+  "ordered_exact_samples": 0,
+  "mean_prompt_tokens": 9191.0,
+  "mean_elapsed_seconds": 20.930243999988306,
+  "elapsed_seconds": 20.930373300012434,
+  "per_sample": [
+    {
+      "sample": 1,
+      "retrieval": {
+        "source_tokens": 1000000,
+        "chunk_count": 7813,
+        "budget_tokens": 8192,
+        "budget_chunks": 64,
+        "chunk_tokens": 128,
+        "span_size": 2,
+        "candidate_k": 128,
+        "neighbor_radius": 1,
+        "selected_span_count": 61,
+        "selected_chunk_count": 64,
+        "selected_target_chunk_count": 10,
+        "target_chunk_precision": 0.15625,
+        "needle_count": 8,
+        "seed_any_needle_recall": 1.0,
+        "active_any_needle_recall": 1.0,
+        "seed_full_needle_recall": 1.0,
+        "active_full_needle_recall": 1.0,
+        "all_needles_active": true,
+        "mean_seed_rank": 12.5,
+        "worst_seed_rank": 16,
+        "position_recall": {
+          "start": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "early": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "center_left": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "center": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "center_right": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "late": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "tail": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          },
+          "end": {
+            "needles": 1,
+            "active_hits": 1,
+            "active_full_hits": 1
+          }
+        },
+        "selected_small_ids": [
+          3,
+          15,
+          32,
+          44,
+          61,
+          73,
+          90,
+          102,
+          117,
+          119,
+          131,
+          148,
+          160,
+          177,
+          189,
+          206,
+          218,
+          235,
+          247,
+          264,
+          276,
+          293,
+          305,
+          322,
+          334,
+          351,
+          363,
+          380,
+          392,
+          409,
+          421,
+          438,
+          450,
+          467,
+          479,
+          496,
+          508,
+          525,
+          537,
+          554,
+          566,
+          583,
+          595,
+          612,
+          624,
+          937,
+          2109,
+          2130,
+          2848,
+          3565,
+          3828,
+          3829,
+          4281,
+          4282,
+          4283,
+          4999,
+          5156,
+          5717,
+          6250,
+          6434,
+          7151,
+          7227,
+          7228,
+          7617
+        ],
+        "per_needle": [
+          {
+            "index": 0,
+            "record": "registry-01-2824",
+            "topic": "archive snapshots",
+            "field": "retention period",
+            "answer": "126225",
+            "zone": "start",
+            "start_token": 14980,
+            "end_token": 15019,
+            "target_chunks": [
+              117
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 13,
+            "seed_chunks_hit": 1,
+            "active_chunks_hit": 1
+          },
+          {
+            "index": 1,
+            "record": "registry-02-5506",
+            "topic": "incident reports",
+            "field": "escalation window",
+            "answer": "356787",
+            "zone": "early",
+            "start_token": 119960,
+            "end_token": 119999,
+            "target_chunks": [
+              937
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 12,
+            "seed_chunks_hit": 1,
+            "active_chunks_hit": 1
+          },
+          {
+            "index": 2,
+            "record": "registry-03-4657",
+            "topic": "batch exports",
+            "field": "delivery schedule",
+            "answer": "246316",
+            "zone": "center_left",
+            "start_token": 270008,
+            "end_token": 270047,
+            "target_chunks": [
+              2109
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 10,
+            "seed_chunks_hit": 1,
+            "active_chunks_hit": 1
+          },
+          {
+            "index": 3,
+            "record": "registry-04-2679",
+            "topic": "access reviews",
+            "field": "approval interval",
+            "answer": "809570",
+            "zone": "center",
+            "start_token": 490098,
+            "end_token": 490137,
+            "target_chunks": [
+              3828,
+              3829
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 16,
+            "seed_chunks_hit": 2,
+            "active_chunks_hit": 2
+          },
+          {
+            "index": 4,
+            "record": "registry-05-9935",
+            "topic": "replication checks",
+            "field": "verification threshold",
+            "answer": "191161",
+            "zone": "center_right",
+            "start_token": 659980,
+            "end_token": 660019,
+            "target_chunks": [
+              5156
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 14,
+            "seed_chunks_hit": 1,
+            "active_chunks_hit": 1
+          },
+          {
+            "index": 5,
+            "record": "registry-06-7912",
+            "topic": "maintenance notices",
+            "field": "publication lead time",
+            "answer": "133326",
+            "zone": "late",
+            "start_token": 800040,
+            "end_token": 800080,
+            "target_chunks": [
+              6250
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 11,
+            "seed_chunks_hit": 1,
+            "active_chunks_hit": 1
+          },
+          {
+            "index": 6,
+            "record": "registry-07-1488",
+            "topic": "quota alerts",
+            "field": "warning boundary",
+            "answer": "198246",
+            "zone": "tail",
+            "start_token": 925166,
+            "end_token": 925205,
+            "target_chunks": [
+              7227,
+              7228
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 15,
+            "seed_chunks_hit": 2,
+            "active_chunks_hit": 2
+          },
+          {
+            "index": 7,
+            "record": "registry-08-4582",
+            "topic": "recovery drills",
+            "field": "verification code",
+            "answer": "343962",
+            "zone": "end",
+            "start_token": 975008,
+            "end_token": 975047,
+            "target_chunks": [
+              7617
+            ],
+            "seed_any_chunk_hit": true,
+            "active_any_chunk_hit": true,
+            "seed_full_needle_hit": true,
+            "active_full_needle_hit": true,
+            "seed_rank": 9,
+            "seed_chunks_hit": 1,
+            "active_chunks_hit": 1
+          }
+        ]
+      },
+      "prompt_tokens": 9191,
+      "generated_tokens": 6,
+      "answer_hits": 0,
+      "answer_recall": 0.0,
+      "ordered_exact": false,
+      "expected_answers": [
+        "126225",
+        "356787",
+        "246316",
+        "809570",
+        "191161",
+        "133326",
+        "198246",
+        "343962"
+      ],
+      "found_six_digit_values": [
+        "688508"
+      ],
+      "output": "688508",
+      "elapsed_seconds": 20.930243999988306
+    }
+  ]
+}
