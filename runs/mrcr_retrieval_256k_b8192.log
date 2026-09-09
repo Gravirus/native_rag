@@ -1,0 +1,38 @@
+MRCR retrieval-only: bin=256k samples=30 budget=8192 (32 chunks) lexical=BM25 CPU
+[1/30] hit=1 rank=5 coverage=1.00 source_tokens=157010
+[2/30] hit=1 rank=5 coverage=0.33 source_tokens=162375
+[3/30] hit=1 rank=14 coverage=0.67 source_tokens=235453
+[4/30] hit=1 rank=7 coverage=0.33 source_tokens=226721
+[5/30] hit=1 rank=22 coverage=1.00 source_tokens=182499
+[6/30] hit=0 rank=- coverage=0.00 source_tokens=201969
+[7/30] hit=1 rank=7 coverage=1.00 source_tokens=215919
+[8/30] hit=1 rank=9 coverage=0.67 source_tokens=204741
+[9/30] hit=1 rank=5 coverage=0.50 source_tokens=184815
+[10/30] hit=1 rank=7 coverage=0.50 source_tokens=146259
+[11/30] hit=1 rank=26 coverage=0.67 source_tokens=270352
+[12/30] hit=1 rank=13 coverage=0.33 source_tokens=186140
+[13/30] hit=1 rank=4 coverage=0.50 source_tokens=199573
+[14/30] hit=1 rank=15 coverage=0.33 source_tokens=234094
+[15/30] hit=1 rank=9 coverage=0.50 source_tokens=239415
+[16/30] hit=1 rank=25 coverage=0.50 source_tokens=247221
+[17/30] hit=1 rank=11 coverage=0.33 source_tokens=165176
+[18/30] hit=1 rank=29 coverage=0.50 source_tokens=175951
+[19/30] hit=1 rank=10 coverage=0.33 source_tokens=174072
+[20/30] hit=1 rank=4 coverage=0.67 source_tokens=146727
+[21/30] hit=1 rank=16 coverage=0.50 source_tokens=232720
+[22/30] hit=1 rank=20 coverage=0.67 source_tokens=233990
+[23/30] hit=1 rank=7 coverage=0.33 source_tokens=140248
+[24/30] hit=0 rank=- coverage=0.00 source_tokens=207861
+[25/30] hit=1 rank=23 coverage=1.00 source_tokens=251325
+[26/30] hit=1 rank=16 coverage=0.33 source_tokens=219773
+[27/30] hit=1 rank=6 coverage=0.50 source_tokens=152929
+[28/30] hit=1 rank=7 coverage=0.67 source_tokens=145482
+[29/30] hit=1 rank=17 coverage=0.75 source_tokens=177074
+[30/30] hit=1 rank=8 coverage=0.67 source_tokens=152056
+=== RESULT ===
+retrieval_recall=28/30 (0.933)
+any_target_chunk_recall=28/30 (0.933)
+mean_target_coverage=0.536
+mean_hit_rank=12.392857142857142
+elapsed_seconds=49.6
+saved=C:\Users\GrAvIRus\Desktop\3233232\native_rag\runs\mrcr_retrieval_256k_b8192.json
